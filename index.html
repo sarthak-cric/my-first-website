@@ -36,23 +36,33 @@
             </div>
         </aside>
 
+        <!-- Top Bar (Mobile Only) -->
+        <header class="top-bar">
+            <div class="top-bar-brand">
+                <div class="top-bar-logo">M</div>
+                <h2>MY E-ID</h2>
+            </div>
+            <img src="student.png" alt="Profile" class="top-bar-avatar" id="topBarAvatar" onerror="this.src='https://ui-avatars.com/api/?name=Student&background=2563eb&color=fff&size=120'">
+        </header>
+
         <!-- Main Content Area -->
         <main class="main-content">
             <!-- Login View -->
             <section id="login" class="view-section">
                 <div class="login-container">
                     <div class="login-box">
-                        <h2>Student Login</h2>
+                        <h2>Portal Login</h2>
                         <p>Access your MY E-ID portal</p>
-                        <form class="login-form" onsubmit="event.preventDefault(); switchView('dashboard');">
+                        <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
                             <div class="input-group">
                                 <i class="fas fa-user"></i>
-                                <input type="text" placeholder="Student ID" required>
+                                <input type="text" id="loginStudentId" placeholder="ID (Student/Staff)" required>
                             </div>
                             <div class="input-group">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Password" required>
+                                <input type="password" id="loginPassword" placeholder="Password" required>
                             </div>
+                            <p id="loginError" style="color: #ef4444; font-size: 0.85rem; margin-top: -10px; margin-bottom: 10px; display: none;">Invalid credentials.</p>
                             <button type="submit" class="btn-primary">Secure Login</button>
                         </form>
                     </div>
@@ -62,10 +72,10 @@
             <!-- Dashboard View -->
             <section id="dashboard" class="view-section active">
                 <header class="view-header" style="display: flex; align-items: center; gap: 1.5rem;">
-                    <img src="student.png" alt="Student Profile" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #3b82f6; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    <img src="student.png" id="dashboardPhoto" alt="Profile" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #3b82f6; box-shadow: 0 4px 10px rgba(0,0,0,0.2);" onerror="this.src='https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=120'">
                     <div>
-                        <h1 style="margin-bottom: 0.2rem;">Student Dashboard</h1>
-                        <p style="margin: 0;">Welcome back, Rahul Sharma</p>
+                        <h1 style="margin-bottom: 0.2rem;" id="dashboardTitle">Dashboard</h1>
+                        <p style="margin: 0;" id="dashboardWelcome">Welcome back</p>
                     </div>
                 </header>
                 
@@ -75,7 +85,7 @@
                         <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                         <div class="stat-details">
                             <h3>Total Days Present</h3>
-                            <p class="stat-number">142 <span>Days</span></p>
+                            <p class="stat-number">0 <span>Days</span></p>
                         </div>
                     </div>
                     
@@ -83,7 +93,7 @@
                         <div class="stat-icon"><i class="fas fa-clock"></i></div>
                         <div class="stat-details">
                             <h3>Last Entry</h3>
-                            <p class="stat-number">08:45 <span>AM</span></p>
+                            <p class="stat-number">--:-- <span>--</span></p>
                         </div>
                     </div>
 
@@ -100,24 +110,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>11 Aug 2026</td>
-                                    <td>08:45 AM</td>
-                                    <td><span class="status-badge success">ON-TIME</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10 Aug 2026</td>
-                                    <td>08:30 AM</td>
-                                    <td><span class="status-badge success">ON-TIME</span></td>
-                                </tr>
-                                <tr>
-                                    <td>09 Aug 2026</td>
-                                    <td>09:15 AM</td>
-                                    <td><span class="status-badge warning">Late</span></td>
-                                </tr>
-                                <tr>
-                                    <td>08 Aug 2026</td>
-                                    <td>08:40 AM</td>
-                                    <td><span class="status-badge success">ON-TIME</span></td>
+                                    <td colspan="3" style="text-align:center;">No recent logs found.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -150,33 +143,33 @@
                             <main class="card-body">
                                 <div class="photo-section">
                                     <div class="photo-wrapper">
-                                        <img src="student.png" alt="Student Photo" class="student-photo" onerror="this.src='https://ui-avatars.com/api/?name=Rahul+Sharma&background=2563eb&color=fff&size=120'">
+                                        <img src="student.png" alt="Student Photo" id="eidPhoto" class="student-photo" onerror="this.src='https://ui-avatars.com/api/?name=Student&background=2563eb&color=fff&size=120'">
                                     </div>
                                     <div class="student-name-box">
-                                        <h3 class="student-name">Rahul Sharma</h3>
-                                        <p class="student-course">B.Tech Computer Science</p>
+                                        <h3 class="student-name" id="eidName">Student Name</h3>
+                                        <p class="student-course" id="eidCourse">Course Name</p>
                                     </div>
                                 </div>
                                 
                                 <div class="details-section">
                                     <div class="detail-row">
                                         <div class="detail-group">
-                                            <span class="detail-label">Roll No</span>
-                                            <span class="detail-value">CS-2023-045</span>
+                                            <span class="detail-label" id="eidLabel1">Roll No</span>
+                                            <span class="detail-value" id="eidRoll">----</span>
                                         </div>
                                         <div class="detail-group text-right">
-                                            <span class="detail-label">Batch</span>
-                                            <span class="detail-value">2023 - 2027</span>
+                                            <span class="detail-label" id="eidLabel2">Batch</span>
+                                            <span class="detail-value" id="eidBatch">----</span>
                                         </div>
                                     </div>
                                     <div class="detail-row">
                                         <div class="detail-group">
-                                            <span class="detail-label">Admission No</span>
-                                            <span class="detail-value">SP-23-4589</span>
+                                            <span class="detail-label" id="eidLabel3">Admission No</span>
+                                            <span class="detail-value" id="eidAdmn">----</span>
                                         </div>
                                         <div class="detail-group text-right">
-                                            <span class="detail-label">Student ID</span>
-                                            <span class="detail-value">SID-102938</span>
+                                            <span class="detail-label" id="eidLabel4">Student ID</span>
+                                            <span class="detail-value" id="eidSid">----</span>
                                         </div>
                                     </div>
                                 </div>
@@ -184,7 +177,7 @@
                             
                             <footer class="card-footer">
                                 <div class="qr-code-wrapper">
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=Name:Rahul+Sharma,Roll:CS-2023-045,Admn:SP-23-4589" alt="Student QR Code" class="qr-code">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=StudentQR" id="eidQr" alt="Student QR Code" class="qr-code">
                                 </div>
                                 <div class="footer-info">
                                     <p class="managed-by">Managed By GRD Educational Trust</p>
@@ -199,16 +192,124 @@
                 </div>
             </section>
         </main>
+
+        <!-- Bottom Navigation (Mobile Only) -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="switchView('dashboard')">
+                <i class="fas fa-home"></i>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-btn" onclick="switchView('id-card')">
+                <i class="fas fa-id-card"></i>
+                <span class="nav-label">E-ID Card</span>
+            </button>
+            <button class="nav-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-label">Logout</span>
+            </button>
+        </nav>
     </div>
 
     <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInStr = localStorage.getItem('loggedInUser');
+            const userType = localStorage.getItem('loggedInUserType') || 'student';
+            if (loggedInStr) {
+                const user = JSON.parse(loggedInStr);
+                populateUserData(user, userType);
+                switchView('dashboard');
+            } else {
+                switchView('login');
+            }
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const sid = document.getElementById('loginStudentId').value;
+            const pass = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            let user = null;
+            let userType = 'student';
+
+            if (sid.startsWith('EMP')) {
+                const storedStaff = JSON.parse(localStorage.getItem('registeredStaff') || '[]');
+                user = storedStaff.find(s => s.empId === sid && s.password === pass);
+                userType = 'staff';
+            } else {
+                const storedStudents = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+                user = storedStudents.find(s => s.studentId === sid && s.password === pass);
+            }
+
+            if (user) {
+                errorEl.style.display = 'none';
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                localStorage.setItem('loggedInUserType', userType);
+                populateUserData(user, userType);
+                switchView('dashboard');
+                document.getElementById('loginForm').reset();
+            } else {
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function populateUserData(user, type) {
+            // Dashboard
+            document.getElementById('dashboardWelcome').textContent = 'Welcome back, ' + user.name;
+            document.getElementById('dashboardTitle').textContent = type === 'staff' ? 'Staff Dashboard' : 'Student Dashboard';
+            
+            // E-ID Card
+            document.getElementById('eidName').textContent = user.name;
+            document.getElementById('eidCourse').textContent = type === 'staff' ? user.desig : user.course;
+            document.getElementById('eidRoll').textContent = type === 'staff' ? user.empId : user.roll;
+            document.getElementById('eidBatch').textContent = type === 'staff' ? user.dept : user.batch;
+            document.getElementById('eidAdmn').textContent = type === 'staff' ? user.status : user.admission;
+            document.getElementById('eidSid').textContent = type === 'staff' ? user.doj || 'N/A' : user.studentId;
+
+            document.getElementById('eidLabel1').textContent = type === 'staff' ? 'Employee ID' : 'Roll No';
+            document.getElementById('eidLabel2').textContent = type === 'staff' ? 'Department' : 'Batch';
+            document.getElementById('eidLabel3').textContent = type === 'staff' ? 'Status' : 'Admission No';
+            document.getElementById('eidLabel4').textContent = type === 'staff' ? 'Joining Date' : 'Student ID';
+
+            // Generate QR code content based on user data
+            const qrData = type === 'staff' 
+                ? `Name:${user.name},EmpID:${user.empId},Dept:${user.dept}`
+                : `Name:${user.name},Roll:${user.roll},Admn:${user.admission}`;
+            document.getElementById('eidQr').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}`;
+            
+            // Setup fallback image based on name
+            const fallbackSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff&size=120`;
+            const photoEl = document.getElementById('eidPhoto');
+            const topBarAvatar = document.getElementById('topBarAvatar');
+            const dashboardPhoto = document.getElementById('dashboardPhoto');
+            
+            photoEl.onerror = function() { this.src = fallbackSrc; };
+            if (topBarAvatar) topBarAvatar.onerror = function() { this.src = fallbackSrc; };
+            if (dashboardPhoto) dashboardPhoto.onerror = function() { this.src = fallbackSrc; };
+            
+            // Try to set the actual uploaded photo, or trigger error if none exists
+            const photoSrc = user.photo || "invalid_path.jpg";
+            photoEl.src = photoSrc; 
+            if (topBarAvatar) topBarAvatar.src = photoSrc;
+            if (dashboardPhoto) dashboardPhoto.src = photoSrc;
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('loggedInUserType');
+            switchView('login');
+        }
+
         function switchView(viewId) {
             // Update nav buttons
             var buttons = document.querySelectorAll('.nav-btn');
             buttons.forEach(function(btn) {
                 btn.classList.remove('active');
             });
-            event.currentTarget.classList.add('active');
+            // Try to find the button that triggers this view
+            const triggerBtn = Array.from(buttons).find(b => b.getAttribute('onclick') === `switchView('${viewId}')`);
+            if (triggerBtn) triggerBtn.classList.add('active');
 
             // Update views
             var views = document.querySelectorAll('.view-section');

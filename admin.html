@@ -30,8 +30,12 @@
         </button>
         <button class="nav-item" onclick="switchPage('students', this)" id="nav-students">
             <i class="fas fa-users"></i>
-            <span>Students</span>
+            <span>Student E-ID</span>
             <span class="nav-badge">248</span>
+        </button>
+        <button class="nav-item" onclick="switchPage('staff', this)" id="nav-staff">
+            <i class="fas fa-user-tie"></i>
+            <span>Staff E-ID</span>
         </button>
         <button class="nav-item" onclick="switchPage('attendance', this)" id="nav-attendance">
             <i class="fas fa-calendar-check"></i>
@@ -54,6 +58,10 @@
         <button class="nav-item" onclick="switchPage('settings', this)" id="nav-settings">
             <i class="fas fa-sliders-h"></i>
             <span>Settings</span>
+        </button>
+        <button class="nav-item" onclick="switchPage('activity', this)" id="nav-activity">
+            <i class="fas fa-list-ul"></i>
+            <span>Activity Log</span>
         </button>
     </nav>
 
@@ -241,7 +249,7 @@
             <div class="activity-card">
                 <div class="card-title">
                     <h3><i class="fas fa-bolt"></i> Recent Activity</h3>
-                    <button class="text-btn">View All</button>
+                    <button class="text-btn" onclick="switchPage('activity', document.getElementById('nav-activity'))">View All</button>
                 </div>
                 <ul class="activity-list">
                     <li>
@@ -314,7 +322,7 @@
     <main class="page" id="page-students">
         <div class="page-header">
             <div>
-                <h1>Student Management</h1>
+                <h1>Student E-ID Management</h1>
                 <p>View, add, and manage all enrolled students</p>
             </div>
             <div class="page-header-actions">
@@ -363,6 +371,56 @@
                     <button class="page-btn active">1</button>
                     <button class="page-btn">2</button>
                     <button class="page-btn">3</button>
+                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============ PAGE: STAFF ============ -->
+    <main class="page" id="page-staff">
+        <div class="page-header">
+            <div>
+                <h1>Staff E-ID Management</h1>
+                <p>View, add, and manage all staff members</p>
+            </div>
+            <div class="page-header-actions">
+                <button class="btn-outline"><i class="fas fa-file-import"></i> Import CSV</button>
+                <button class="btn-primary" onclick="openModal('addStaffModal')"><i class="fas fa-plus"></i> Add Staff</button>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by name, employee ID…" id="staffSearch" oninput="filterStaff()">
+            </div>
+            <select class="filter-select" id="staffDeptFilter" onchange="filterStaff()">
+                <option value="">All Departments</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Management">Management</option>
+                <option value="Administration">Administration</option>
+            </select>
+        </div>
+
+        <div class="table-card">
+            <table class="data-table" id="staffTable">
+                <thead>
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Employee ID</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="staffTbody"></tbody>
+            </table>
+            <div class="table-footer">
+                <p id="staffCount">Showing 0 of 0 staff</p>
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
                     <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
@@ -569,6 +627,75 @@
         </div>
     </main>
 
+    <!-- ============ PAGE: ACTIVITY ============ -->
+    <main class="page" id="page-activity">
+        <div class="page-header">
+            <div>
+                <h1>Activity Log</h1>
+                <p>Complete history of system and student activity</p>
+            </div>
+            <div class="page-header-actions">
+                <button class="btn-outline"><i class="fas fa-filter"></i> Filter</button>
+                <button class="btn-outline"><i class="fas fa-download"></i> Export Log</button>
+            </div>
+        </div>
+        
+        <div class="table-card">
+            <ul class="activity-list" style="padding: 1.5rem;" id="fullActivityList">
+                <!-- Activities will be rendered here via JS, or hardcoded for now like the dashboard -->
+                <li>
+                    <div class="act-dot blue"></div>
+                    <div class="act-body">
+                        <p><strong>Rahul Sharma</strong> scanned E-ID at Gate A</p>
+                        <span>Today 08:45 AM — CS-2023-045</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot green"></div>
+                    <div class="act-body">
+                        <p><strong>Priya Mehta</strong> registered successfully</p>
+                        <span>Today 08:32 AM — New Enrollment</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot orange"></div>
+                    <div class="act-body">
+                        <p><strong>Arjun Kapoor</strong> marked as Late</p>
+                        <span>Today 09:15 AM — ME-2022-112</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot purple"></div>
+                    <div class="act-body">
+                        <p><strong>E-ID</strong> issued to 3 new students</p>
+                        <span>Yesterday 14:20 PM — Batch 2026</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot red"></div>
+                    <div class="act-body">
+                        <p><strong>System</strong> backup completed</p>
+                        <span>Yesterday 11:00 PM</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot blue"></div>
+                    <div class="act-body">
+                        <p><strong>Sneha Verma</strong> scanned E-ID at Gate C</p>
+                        <span>Yesterday 08:50 AM — BBA-2023-022</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="act-dot green"></div>
+                    <div class="act-body">
+                        <p><strong>Admin</strong> changed attendance rules</p>
+                        <span>2 days ago 10:15 AM — Settings Update</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+
 </div>
 
 <!-- ===================== MODALS ===================== -->
@@ -584,14 +711,25 @@
                 <div class="form-group"><label>Last Name</label><input type="text" placeholder="e.g. Sharma" required></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Course</label><select required><option value="">Select…</option><option>B.Tech CSE</option><option>BBA</option><option>BCA</option></select></div>
-                <div class="form-group"><label>Batch Year</label><input type="number" placeholder="e.g. 2026" min="2000" max="2030" required></div>
+                <div class="form-group"><label>Course</label><select required><option value="">Select…</option><option>B.Tech Computer Science</option><option>B.Tech CSE</option><option>BBA</option><option>BCA</option></select></div>
+                <div class="form-group"><label>Batch</label><input type="text" placeholder="e.g. 2023 - 2027" required></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Admission No</label><input type="text" placeholder="e.g. SP-26-0001" required></div>
-                <div class="form-group"><label>Email</label><input type="email" placeholder="student@shikshapeeth.edu.in" required></div>
+                <div class="form-group"><label>Roll No</label><input type="text" placeholder="e.g. CS-2023-045" required></div>
+                <div class="form-group"><label>Admission No</label><input type="text" placeholder="e.g. SP-23-4589" required></div>
             </div>
-            <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Student ID (Login)</label><input type="text" placeholder="e.g. SID-102938" required></div>
+                <div class="form-group"><label>Password</label><input type="password" placeholder="Create Password" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Email</label><input type="email" placeholder="student@shikshapeeth.edu.in" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" required></div>
+            </div>
+            <div class="form-group">
+                <label>Student Photo</label>
+                <input type="file" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;" required>
+            </div>
             <div class="modal-actions">
                 <button type="button" class="btn-outline" onclick="closeModal('addStudentModal')">Cancel</button>
                 <button type="submit" class="btn-primary"><i class="fas fa-user-plus"></i> Add Student</button>
@@ -642,6 +780,278 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="viewStudentModal" onclick="closeModalOnOverlay(event, 'viewStudentModal')">
+    <div class="modal" style="background: transparent; box-shadow: none; padding: 0;">
+        <div class="id-card-wrapper" style="margin: 0;">
+            <div class="card-container" style="position: relative;">
+                <button class="modal-close" onclick="closeModal('viewStudentModal')" style="position: absolute; top: -10px; right: -10px; z-index: 10; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"><i class="fas fa-times"></i></button>
+                
+                <div class="id-card">
+                    <div class="card-top-accent"></div>
+                    <header class="card-header">
+                        <div class="logo-container">
+                            <img src="logo.png" alt="College Logo">
+                        </div>
+                        <div class="college-info">
+                            <h1>Shikshapeeth</h1>
+                            <h2>College of Management And Technology</h2>
+                        </div>
+                    </header>
+                    
+                    <main class="card-body">
+                        <div class="photo-section">
+                            <div class="photo-wrapper">
+                                <img src="student.png" alt="Student Photo" id="vs-photo" class="student-photo" onerror="this.src='https://ui-avatars.com/api/?name=Student&background=2563eb&color=fff&size=120'">
+                            </div>
+                            <div class="student-name-box">
+                                <h3 class="student-name" id="vs-name">Student Name</h3>
+                                <p class="student-course" id="vs-dept">Course Name</p>
+                            </div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <div class="detail-row">
+                                <div class="detail-group">
+                                    <span class="detail-label">Roll No</span>
+                                    <span class="detail-value" id="vs-roll">----</span>
+                                </div>
+                                <div class="detail-group text-right">
+                                    <span class="detail-label">Batch</span>
+                                    <span class="detail-value" id="vs-batch">----</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-group">
+                                    <span class="detail-label">Status</span>
+                                    <span class="detail-value" id="vs-status">----</span>
+                                </div>
+                                <div class="detail-group text-right">
+                                    <span class="detail-label">Attendance</span>
+                                    <span class="detail-value" id="vs-att">----</span>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    
+                    <footer class="card-footer">
+                        <div class="qr-code-wrapper">
+                            <img src="" id="vs-qr" alt="Student QR Code" class="qr-code">
+                        </div>
+                        <div class="footer-info">
+                            <p class="managed-by">Managed By GRD Educational Trust</p>
+                            <div class="contact-info">
+                                <p>16, Bindra Market, New Delhi</p>
+                                <p>www.shikshapeeth.edu.in</p>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editStudentModal" onclick="closeModalOnOverlay(event, 'editStudentModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h2><i class="fas fa-pen"></i> Edit Student</h2>
+            <button class="modal-close" onclick="closeModal('editStudentModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <form class="modal-form" id="editStudentForm" onsubmit="submitEditStudent(event)">
+            <input type="hidden" id="edit-roll">
+            <div class="form-group"><label>Full Name</label><input type="text" id="edit-name" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Department</label>
+                    <select id="edit-dept" required>
+                        <option value="B.Tech CSE">B.Tech CSE</option><option value="BBA">BBA</option><option value="BCA">BCA</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Batch</label><input type="text" id="edit-batch" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Attendance %</label><input type="number" id="edit-att" min="0" max="100" required></div>
+                <div class="form-group"><label>Status</label>
+                    <select id="edit-status" required>
+                        <option value="Active">Active</option><option value="Warning">Warning</option><option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" onclick="closeModal('editStudentModal')">Cancel</button>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteStudentModal" onclick="closeModalOnOverlay(event, 'deleteStudentModal')">
+    <div class="modal" style="max-width: 400px; text-align: center;">
+        <div class="modal-body" style="padding: 2rem;">
+            <div style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2 style="margin-bottom: 0.5rem;">Delete Student?</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">Are you sure you want to delete <strong id="ds-name"></strong>? This action cannot be undone.</p>
+            <input type="hidden" id="ds-roll">
+            <div class="modal-actions" style="justify-content: center; gap: 1rem;">
+                <button type="button" class="btn-outline" onclick="closeModal('deleteStudentModal')">Cancel</button>
+                <button type="button" class="btn-primary" style="background: #ef4444; border-color: #ef4444;" onclick="submitDeleteStudent()"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addStaffModal" onclick="closeModalOnOverlay(event, 'addStaffModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h2><i class="fas fa-user-tie"></i> Add New Staff</h2>
+            <button class="modal-close" onclick="closeModal('addStaffModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <form class="modal-form" onsubmit="submitAddStaff(event)">
+            <div class="form-row">
+                <div class="form-group"><label>First Name</label><input type="text" placeholder="e.g. Ramesh" required></div>
+                <div class="form-group"><label>Last Name</label><input type="text" placeholder="e.g. Kumar" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Department</label><select required><option value="">Select…</option><option>Computer Science</option><option>Management</option><option>Administration</option></select></div>
+                <div class="form-group"><label>Designation</label><input type="text" placeholder="e.g. Assistant Professor" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Employee ID</label><input type="text" placeholder="e.g. EMP-1029" required></div>
+                <div class="form-group"><label>Password</label><input type="password" placeholder="Create Password" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Email</label><input type="email" placeholder="staff@shikshapeeth.edu.in" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" required></div>
+            </div>
+            <div class="form-group">
+                <label>Staff Photo</label>
+                <input type="file" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" onclick="closeModal('addStaffModal')">Cancel</button>
+                <button type="submit" class="btn-primary"><i class="fas fa-user-plus"></i> Add Staff</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="viewStaffModal" onclick="closeModalOnOverlay(event, 'viewStaffModal')">
+    <div class="modal" style="background: transparent; box-shadow: none; padding: 0;">
+        <div class="id-card-wrapper" style="margin: 0;">
+            <div class="card-container" style="position: relative;">
+                <button class="modal-close" onclick="closeModal('viewStaffModal')" style="position: absolute; top: -10px; right: -10px; z-index: 10; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"><i class="fas fa-times"></i></button>
+                
+                <div class="id-card">
+                    <div class="card-top-accent" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></div>
+                    <header class="card-header">
+                        <div class="logo-container">
+                            <img src="logo.png" alt="College Logo">
+                        </div>
+                        <div class="college-info">
+                            <h1>Shikshapeeth</h1>
+                            <h2>College of Management And Technology</h2>
+                        </div>
+                    </header>
+                    
+                    <main class="card-body">
+                        <div class="photo-section">
+                            <div class="photo-wrapper" style="background: linear-gradient(135deg, #e2e8f0, #cbd5e1);">
+                                <img src="student.png" alt="Staff Photo" id="vst-photo" class="student-photo" onerror="this.src='https://ui-avatars.com/api/?name=Staff&background=3b82f6&color=fff&size=120'">
+                            </div>
+                            <div class="student-name-box">
+                                <h3 class="student-name" id="vst-name">Staff Name</h3>
+                                <p class="student-course" id="vst-desig" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">Designation</p>
+                            </div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <div class="detail-row">
+                                <div class="detail-group">
+                                    <span class="detail-label">Employee ID</span>
+                                    <span class="detail-value" id="vst-empId">----</span>
+                                </div>
+                                <div class="detail-group text-right">
+                                    <span class="detail-label">Department</span>
+                                    <span class="detail-value" id="vst-dept">----</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-group">
+                                    <span class="detail-label">Status</span>
+                                    <span class="detail-value" id="vst-status">----</span>
+                                </div>
+                                <div class="detail-group text-right">
+                                    <!-- Intentionally left blank to replace Joining Date -->
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    
+                    <footer class="card-footer">
+                        <div class="qr-code-wrapper">
+                            <img src="" id="vst-qr" alt="Staff QR Code" class="qr-code">
+                        </div>
+                        <div class="footer-info">
+                            <p class="managed-by">Managed By GRD Educational Trust</p>
+                            <div class="contact-info">
+                                <p>Staff ID Card</p>
+                                <p>Valid for campus access</p>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editStaffModal" onclick="closeModalOnOverlay(event, 'editStaffModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h2><i class="fas fa-pen"></i> Edit Staff</h2>
+            <button class="modal-close" onclick="closeModal('editStaffModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <form class="modal-form" id="editStaffForm" onsubmit="submitEditStaff(event)">
+            <input type="hidden" id="edit-st-empId">
+            <div class="form-group"><label>Full Name</label><input type="text" id="edit-st-name" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Department</label>
+                    <select id="edit-st-dept" required>
+                        <option value="Computer Science">Computer Science</option><option value="Management">Management</option><option value="Administration">Administration</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Designation</label><input type="text" id="edit-st-desig" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Password</label><input type="text" id="edit-st-pass" required></div>
+                <div class="form-group"><label>Status</label>
+                    <select id="edit-st-status" required>
+                        <option value="Active">Active</option><option value="Inactive">Inactive</option><option value="On Leave">On Leave</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" onclick="closeModal('editStaffModal')">Cancel</button>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteStaffModal" onclick="closeModalOnOverlay(event, 'deleteStaffModal')">
+    <div class="modal" style="max-width: 400px; text-align: center;">
+        <div class="modal-body" style="padding: 2rem;">
+            <div style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2 style="margin-bottom: 0.5rem;">Delete Staff?</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">Are you sure you want to delete <strong id="dst-name"></strong>? This action cannot be undone.</p>
+            <input type="hidden" id="dst-empId">
+            <div class="modal-actions" style="justify-content: center; gap: 1rem;">
+                <button type="button" class="btn-outline" onclick="closeModal('deleteStaffModal')">Cancel</button>
+                <button type="button" class="btn-primary" style="background: #ef4444; border-color: #ef4444;" onclick="submitDeleteStaff()"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- ===================== SCRIPTS ===================== -->
@@ -657,6 +1067,12 @@ const students = [
     { name:'Riya Khanna',   roll:'BT-2024-015',  dept:'B.Tech CSE', batch:'2024', att:97, status:'Active'    },
     { name:'Mohit Gupta',   roll:'BBA-2023-088', dept:'BBA',    batch:'2023', att:70, status:'Active'    },
     { name:'Tanya Iyer',    roll:'BCA-2024-019', dept:'BCA',    batch:'2024', att:85, status:'Active'    },
+];
+
+const staff = [
+    { name:'Dr. Amit Verma', empId:'EMP-1001', dept:'Computer Science', desig:'Professor', doj:'2015-08-01', status:'Active' },
+    { name:'Sonia Bajaj',    empId:'EMP-1005', dept:'Management',       desig:'Asst. Professor', doj:'2018-07-15', status:'Active' },
+    { name:'Rajeev Shukla',  empId:'EMP-2003', dept:'Administration',   desig:'Registrar', doj:'2010-04-10', status:'Active' },
 ];
 
 const attendanceLogs = [
@@ -713,7 +1129,63 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function submitAddStudent(e)   { e.preventDefault(); closeModal('addStudentModal'); showToast('Student added successfully!'); }
+function submitAddStudent(e) {
+    e.preventDefault();
+    
+    // Read form values
+    const form = e.target;
+    const inputs = form.querySelectorAll('input, select');
+    const fileInput = form.querySelector('input[type="file"]');
+    
+    const saveStudent = (photoDataUrl) => {
+        const student = {
+            firstName: inputs[0].value,
+            lastName: inputs[1].value,
+            name: inputs[0].value + ' ' + inputs[1].value,
+            course: inputs[2].value,
+            batch: inputs[3].value,
+            roll: inputs[4].value,
+            admission: inputs[5].value,
+            studentId: inputs[6].value,
+            password: inputs[7].value,
+            email: inputs[8].value,
+            phone: inputs[9].value,
+            photo: photoDataUrl,
+            att: 0, // Default attendance
+            status: 'Active'
+        };
+
+        // Save to localStorage
+        let storedStudents = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+        storedStudents.push(student);
+        localStorage.setItem('registeredStudents', JSON.stringify(storedStudents));
+
+        students.push({
+            name: student.name,
+            roll: student.roll,
+            dept: student.course,
+            batch: student.batch,
+            att: student.att,
+            status: student.status
+        });
+        filterStudents();
+
+        closeModal('addStudentModal');
+        showToast('Student added successfully!');
+        form.reset();
+    };
+
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            saveStudent(evt.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        saveStudent(null);
+    }
+}
+
 function submitIssueId(e)      { e.preventDefault(); closeModal('issueIdModal');    showToast('E-ID issued successfully!'); }
 function submitAnnouncement(e) { e.preventDefault(); closeModal('announceModal');   showToast('Announcement published!'); }
 
@@ -738,14 +1210,112 @@ function renderStudents(data) {
             <td><span class="status-pill ${s.status.toLowerCase()}">${s.status}</span></td>
             <td>
                 <div class="action-btns">
-                    <button class="action-icon" title="View"   onclick="showToast('Viewing ${s.name}')"><i class="fas fa-eye"></i></button>
-                    <button class="action-icon" title="Edit"   onclick="showToast('Editing ${s.name}')"><i class="fas fa-pen"></i></button>
-                    <button class="action-icon danger" title="Delete" onclick="showToast('Deleted ${s.name}')"><i class="fas fa-trash"></i></button>
+                    <button class="action-icon" title="View"   onclick="viewStudent('${s.roll}')"><i class="fas fa-eye"></i></button>
+                    <button class="action-icon" title="Edit"   onclick="editStudent('${s.roll}')"><i class="fas fa-pen"></i></button>
+                    <button class="action-icon danger" title="Delete" onclick="deleteStudent('${s.roll}')"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`).join('');
-    document.getElementById('studentCount').textContent = `Showing ${data.length} of 248 students`;
+    document.getElementById('studentCount').textContent = `Showing ${data.length} of ${students.length} students`;
 }
+
+function viewStudent(roll) {
+    const student = students.find(s => s.roll === roll);
+    if(student) {
+        const photoEl = document.getElementById('vs-photo');
+        const fallbackSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=2563eb&color=fff&size=120`;
+        photoEl.onerror = function() { this.src = fallbackSrc; };
+        photoEl.src = student.photo || fallbackSrc;
+        
+        document.getElementById('vs-name').textContent = student.name;
+        document.getElementById('vs-dept').textContent = student.dept;
+        document.getElementById('vs-roll').textContent = student.roll;
+        document.getElementById('vs-batch').textContent = student.batch;
+        document.getElementById('vs-status').innerHTML = `<span class="status-pill ${student.status.toLowerCase()}" style="font-size: 0.7rem; padding: 2px 8px;">${student.status}</span>`;
+        document.getElementById('vs-att').textContent = student.att + '%';
+        
+        const qrData = `Name:${student.name},Roll:${student.roll},Dept:${student.dept}`;
+        document.getElementById('vs-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}`;
+        
+        openModal('viewStudentModal');
+    }
+}
+
+function editStudent(roll) {
+    const student = students.find(s => s.roll === roll);
+    if(student) {
+        document.getElementById('edit-roll').value = student.roll;
+        document.getElementById('edit-name').value = student.name;
+        
+        const deptSelect = document.getElementById('edit-dept');
+        for(let i=0; i<deptSelect.options.length; i++) {
+            if(deptSelect.options[i].value === student.dept) { deptSelect.selectedIndex = i; break; }
+        }
+
+        document.getElementById('edit-batch').value = student.batch;
+        document.getElementById('edit-att').value = student.att;
+
+        const statusSelect = document.getElementById('edit-status');
+        for(let i=0; i<statusSelect.options.length; i++) {
+            if(statusSelect.options[i].value === student.status) { statusSelect.selectedIndex = i; break; }
+        }
+        
+        openModal('editStudentModal');
+    }
+}
+
+function submitEditStudent(e) {
+    e.preventDefault();
+    const roll = document.getElementById('edit-roll').value;
+    const student = students.find(s => s.roll === roll);
+    if(student) {
+        student.name = document.getElementById('edit-name').value;
+        student.dept = document.getElementById('edit-dept').value;
+        student.batch = document.getElementById('edit-batch').value;
+        student.att = document.getElementById('edit-att').value;
+        student.status = document.getElementById('edit-status').value;
+
+        let storedStudents = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+        let storedIndex = storedStudents.findIndex(s => s.roll === roll);
+        if(storedIndex > -1) {
+            storedStudents[storedIndex].name = student.name;
+            storedStudents[storedIndex].course = student.dept;
+            storedStudents[storedIndex].batch = student.batch;
+            storedStudents[storedIndex].att = student.att;
+            storedStudents[storedIndex].status = student.status;
+            localStorage.setItem('registeredStudents', JSON.stringify(storedStudents));
+        }
+
+        filterStudents();
+        closeModal('editStudentModal');
+        showToast('Student updated successfully!');
+    }
+}
+
+function deleteStudent(roll) {
+    const student = students.find(s => s.roll === roll);
+    if(student) {
+        document.getElementById('ds-name').textContent = student.name;
+        document.getElementById('ds-roll').value = student.roll;
+        openModal('deleteStudentModal');
+    }
+}
+
+function submitDeleteStudent() {
+    const roll = document.getElementById('ds-roll').value;
+    const index = students.findIndex(s => s.roll === roll);
+    if(index > -1) {
+        students.splice(index, 1);
+        let storedStudents = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+        storedStudents = storedStudents.filter(s => s.roll !== roll);
+        localStorage.setItem('registeredStudents', JSON.stringify(storedStudents));
+        
+        filterStudents();
+        closeModal('deleteStudentModal');
+        showToast('Student deleted successfully!');
+    }
+}
+
 
 function filterStudents() {
     const q    = document.getElementById('studentSearch').value.toLowerCase();
@@ -755,6 +1325,172 @@ function filterStudents() {
         (s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q)) &&
         (!dept || s.dept === dept) && (!bat || s.batch === bat)
     ));
+}
+
+function submitAddStaff(e) {
+    e.preventDefault();
+    const form = e.target;
+    const inputs = form.querySelectorAll('input, select');
+    const fileInput = form.querySelector('input[type="file"]');
+    
+    const saveStaff = (photoDataUrl) => {
+        const newStaff = {
+            name: inputs[0].value + ' ' + inputs[1].value,
+            dept: inputs[2].value,
+            desig: inputs[3].value,
+            empId: inputs[4].value,
+            password: inputs[5].value,
+            email: inputs[6].value,
+            phone: inputs[7].value,
+            photo: photoDataUrl,
+            status: 'Active'
+        };
+
+        let storedStaff = JSON.parse(localStorage.getItem('registeredStaff') || '[]');
+        storedStaff.push(newStaff);
+        localStorage.setItem('registeredStaff', JSON.stringify(storedStaff));
+
+        staff.push({
+            name: newStaff.name,
+            empId: newStaff.empId,
+            dept: newStaff.dept,
+            desig: newStaff.desig,
+            password: newStaff.password,
+            status: newStaff.status,
+            photo: newStaff.photo
+        });
+        filterStaff();
+        closeModal('addStaffModal');
+        showToast('Staff added successfully!');
+        form.reset();
+    };
+
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(evt) { saveStaff(evt.target.result); };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        saveStaff(null);
+    }
+}
+
+function renderStaff(data) {
+    document.getElementById('staffTbody').innerHTML = data.map(s => `
+        <tr>
+            <td>
+                <div class="student-cell">
+                    <div class="s-avatar">${s.name.split(' ').map(n=>n[0]).join('')}</div>
+                    <div><p class="s-name">${s.name}</p></div>
+                </div>
+            </td>
+            <td><code>${s.empId}</code></td>
+            <td>${s.dept}</td>
+            <td>${s.desig}</td>
+            <td><span class="status-pill ${s.status.toLowerCase().replace(' ', '-')}">${s.status}</span></td>
+            <td>
+                <div class="action-btns">
+                    <button class="action-icon" title="View"   onclick="viewStaff('${s.empId}')"><i class="fas fa-eye"></i></button>
+                    <button class="action-icon" title="Edit"   onclick="editStaff('${s.empId}')"><i class="fas fa-pen"></i></button>
+                    <button class="action-icon danger" title="Delete" onclick="deleteStaff('${s.empId}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`).join('');
+    document.getElementById('staffCount').textContent = `Showing ${data.length} of ${staff.length} staff`;
+}
+
+function filterStaff() {
+    const q    = document.getElementById('staffSearch').value.toLowerCase();
+    const dept = document.getElementById('staffDeptFilter').value;
+    renderStaff(staff.filter(s =>
+        (s.name.toLowerCase().includes(q) || s.empId.toLowerCase().includes(q)) &&
+        (!dept || s.dept === dept)
+    ));
+}
+
+function viewStaff(empId) {
+    const s = staff.find(x => x.empId === empId);
+    if(s) {
+        const photoEl = document.getElementById('vst-photo');
+        const fallbackSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=3b82f6&color=fff&size=120`;
+        photoEl.onerror = function() { this.src = fallbackSrc; };
+        photoEl.src = s.photo || fallbackSrc;
+        
+        document.getElementById('vst-name').textContent = s.name;
+        document.getElementById('vst-desig').textContent = s.desig;
+        document.getElementById('vst-empId').textContent = s.empId;
+        document.getElementById('vst-dept').textContent = s.dept;
+        document.getElementById('vst-status').innerHTML = `<span class="status-pill ${s.status.toLowerCase().replace(' ', '-')}" style="font-size: 0.7rem; padding: 2px 8px;">${s.status}</span>`;
+        
+        const qrData = `Name:${s.name},ID:${s.empId},Dept:${s.dept}`;
+        document.getElementById('vst-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}`;
+        
+        openModal('viewStaffModal');
+    }
+}
+
+function editStaff(empId) {
+    const s = staff.find(x => x.empId === empId);
+    if(s) {
+        document.getElementById('edit-st-empId').value = s.empId;
+        document.getElementById('edit-st-name').value = s.name;
+        document.getElementById('edit-st-dept').value = s.dept;
+        document.getElementById('edit-st-desig').value = s.desig;
+        document.getElementById('edit-st-pass').value = s.password || '';
+        document.getElementById('edit-st-status').value = s.status;
+        openModal('editStaffModal');
+    }
+}
+
+function submitEditStaff(e) {
+    e.preventDefault();
+    const empId = document.getElementById('edit-st-empId').value;
+    const s = staff.find(x => x.empId === empId);
+    if(s) {
+        s.name = document.getElementById('edit-st-name').value;
+        s.dept = document.getElementById('edit-st-dept').value;
+        s.desig = document.getElementById('edit-st-desig').value;
+        s.password = document.getElementById('edit-st-pass').value;
+        s.status = document.getElementById('edit-st-status').value;
+
+        let storedStaff = JSON.parse(localStorage.getItem('registeredStaff') || '[]');
+        let storedIndex = storedStaff.findIndex(x => x.empId === empId);
+        if(storedIndex > -1) {
+            storedStaff[storedIndex].name = s.name;
+            storedStaff[storedIndex].dept = s.dept;
+            storedStaff[storedIndex].desig = s.desig;
+            storedStaff[storedIndex].password = s.password;
+            storedStaff[storedIndex].status = s.status;
+            localStorage.setItem('registeredStaff', JSON.stringify(storedStaff));
+        }
+
+        filterStaff();
+        closeModal('editStaffModal');
+        showToast('Staff updated successfully!');
+    }
+}
+
+function deleteStaff(empId) {
+    const s = staff.find(x => x.empId === empId);
+    if(s) {
+        document.getElementById('dst-name').textContent = s.name;
+        document.getElementById('dst-empId').value = s.empId;
+        openModal('deleteStaffModal');
+    }
+}
+
+function submitDeleteStaff() {
+    const empId = document.getElementById('dst-empId').value;
+    const index = staff.findIndex(x => x.empId === empId);
+    if(index > -1) {
+        staff.splice(index, 1);
+        let storedStaff = JSON.parse(localStorage.getItem('registeredStaff') || '[]');
+        storedStaff = storedStaff.filter(x => x.empId !== empId);
+        localStorage.setItem('registeredStaff', JSON.stringify(storedStaff));
+        
+        filterStaff();
+        closeModal('deleteStaffModal');
+        showToast('Staff deleted successfully!');
+    }
 }
 
 function renderAttendance() {
@@ -950,7 +1686,38 @@ document.addEventListener('click', e => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
+    let storedStudents = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+    storedStudents.forEach(s => {
+        if(!students.find(existing => existing.roll === s.roll)) {
+            students.push({
+                name: s.name,
+                roll: s.roll,
+                dept: s.course || 'Unknown',
+                batch: s.batch,
+                att: s.att || 0,
+                status: s.status || 'Active',
+                photo: s.photo
+            });
+        }
+    });
+
+    let storedStaff = JSON.parse(localStorage.getItem('registeredStaff') || '[]');
+    storedStaff.forEach(s => {
+        if(!staff.find(existing => existing.empId === s.empId)) {
+            staff.push({
+                name: s.name,
+                empId: s.empId,
+                dept: s.dept,
+                desig: s.desig,
+                password: s.password || 'password123',
+                status: s.status || 'Active',
+                photo: s.photo
+            });
+        }
+    });
+
     renderStudents(students);
+    renderStaff(staff);
     renderAttendance();
     renderIdCards();
     renderAnnouncements();
