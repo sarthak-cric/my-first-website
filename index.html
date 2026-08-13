@@ -8,14 +8,36 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body.logged-out .sidebar,
+        body.logged-out .bottom-nav,
+        body.logged-out .top-bar {
+            display: none !important;
+        }
+        
+        body.logged-out .main-content {
+            padding-bottom: 0 !important;
+            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('logo.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        body.logged-out #login {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <div class="portal-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo-placeholder">
-                    <span class="logo-icon">M</span>
+                <div class="logo-placeholder" style="cursor: pointer; background: transparent; padding: 0; box-shadow: none;" onclick="toggleAccountOverlay()">
+                    <img src="student.png" id="sidebarAvatar" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);" onerror="this.src='https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=120'">
                 </div>
                 <h2>MY E-ID</h2>
             </div>
@@ -26,7 +48,7 @@
                 <button class="nav-btn" onclick="switchView('id-card')">
                     <i class="fas fa-id-card"></i> E-ID Card
                 </button>
-                <button class="nav-btn" onclick="switchView('login')">
+                <button class="nav-btn" id="sidebarAuthBtn" onclick="switchView('login')">
                     <i class="fas fa-sign-in-alt"></i> Account Login
                 </button>
             </nav>
@@ -42,7 +64,7 @@
                 <div class="top-bar-logo">M</div>
                 <h2>MY E-ID</h2>
             </div>
-            <img src="student.png" alt="Profile" class="top-bar-avatar" id="topBarAvatar" onerror="this.src='https://ui-avatars.com/api/?name=Student&background=2563eb&color=fff&size=120'">
+            <img src="student.png" alt="Profile" class="top-bar-avatar" id="topBarAvatar" style="cursor: pointer;" onclick="toggleAccountOverlay()" onerror="this.src='https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=120'">
         </header>
 
         <!-- Main Content Area -->
@@ -203,11 +225,32 @@
                 <i class="fas fa-id-card"></i>
                 <span class="nav-label">E-ID Card</span>
             </button>
-            <button class="nav-btn" onclick="logout()">
+            <button class="nav-btn" id="mobileAuthBtn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="nav-label">Logout</span>
             </button>
         </nav>
+    </div>
+
+    <!-- Account Details Overlay -->
+    <div class="account-overlay" id="accountOverlay" onclick="if(event.target.id === 'accountOverlay') toggleAccountOverlay()">
+        <div class="account-card">
+            <button class="account-close" onclick="toggleAccountOverlay()"><i class="fas fa-times"></i></button>
+            <img src="student.png" id="accPhoto" alt="Profile" onerror="this.src='https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=120'">
+            <h3 id="accName">Name</h3>
+            <p class="acc-role" id="accRole">Role</p>
+            <div class="acc-info">
+                <div class="acc-info-item">
+                    <span id="accLabel1">ID</span>
+                    <strong id="accValue1">--</strong>
+                </div>
+                <div class="acc-info-item">
+                    <span id="accLabel2">Dept</span>
+                    <strong id="accValue2">--</strong>
+                </div>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 1.5rem; background: #ef4444; border-color: #ef4444;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
     </div>
 
     <script>
@@ -220,9 +263,24 @@
                 populateUserData(user, userType);
                 switchView('dashboard');
             } else {
+                updateAuthButtonsToLogin();
                 switchView('login');
             }
         });
+
+        function updateAuthButtonsToLogin() {
+            document.body.classList.add('logged-out');
+            const sidebarBtn = document.getElementById('sidebarAuthBtn');
+            if (sidebarBtn) {
+                sidebarBtn.setAttribute('onclick', "switchView('login')");
+                sidebarBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Account Login';
+            }
+            const mobileBtn = document.getElementById('mobileAuthBtn');
+            if (mobileBtn) {
+                mobileBtn.setAttribute('onclick', "switchView('login')");
+                mobileBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span class="nav-label">Login</span>';
+            }
+        }
 
         function handleLogin(e) {
             e.preventDefault();
@@ -255,9 +313,10 @@
         }
 
         function populateUserData(user, type) {
+            document.body.classList.remove('logged-out');
             // Dashboard
             document.getElementById('dashboardWelcome').textContent = 'Welcome back, ' + user.name;
-            document.getElementById('dashboardTitle').textContent = type === 'staff' ? 'Staff Dashboard' : 'Student Dashboard';
+            document.getElementById('dashboardTitle').textContent = type === 'staff' ? 'STAFF DASHBOARD' : 'Student Dashboard';
             
             // E-ID Card
             document.getElementById('eidName').textContent = user.name;
@@ -282,26 +341,110 @@
             const fallbackSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff&size=120`;
             const photoEl = document.getElementById('eidPhoto');
             const topBarAvatar = document.getElementById('topBarAvatar');
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
             const dashboardPhoto = document.getElementById('dashboardPhoto');
+            const accPhoto = document.getElementById('accPhoto');
             
             photoEl.onerror = function() { this.src = fallbackSrc; };
             if (topBarAvatar) topBarAvatar.onerror = function() { this.src = fallbackSrc; };
+            if (sidebarAvatar) sidebarAvatar.onerror = function() { this.src = fallbackSrc; };
             if (dashboardPhoto) dashboardPhoto.onerror = function() { this.src = fallbackSrc; };
+            if (accPhoto) accPhoto.onerror = function() { this.src = fallbackSrc; };
             
             // Try to set the actual uploaded photo, or trigger error if none exists
             const photoSrc = user.photo || "invalid_path.jpg";
             photoEl.src = photoSrc; 
             if (topBarAvatar) topBarAvatar.src = photoSrc;
+            if (sidebarAvatar) sidebarAvatar.src = photoSrc;
             if (dashboardPhoto) dashboardPhoto.src = photoSrc;
+            if (accPhoto) accPhoto.src = photoSrc;
+
+            // Populate Account Details Overlay
+            document.getElementById('accName').textContent = user.name;
+            document.getElementById('accRole').textContent = type === 'staff' ? user.desig : 'Student';
+            document.getElementById('accLabel1').textContent = type === 'staff' ? 'Emp ID' : 'Roll No';
+            document.getElementById('accValue1').textContent = type === 'staff' ? user.empId : user.roll;
+            document.getElementById('accLabel2').textContent = type === 'staff' ? 'Dept' : 'Batch';
+            document.getElementById('accValue2').textContent = type === 'staff' ? user.dept : user.batch;
+
+            const sidebarBtn = document.getElementById('sidebarAuthBtn');
+            if (sidebarBtn) {
+                sidebarBtn.setAttribute('onclick', 'logout()');
+                sidebarBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+            }
+            const mobileBtn = document.getElementById('mobileAuthBtn');
+            if (mobileBtn) {
+                mobileBtn.setAttribute('onclick', 'logout()');
+                mobileBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i><span class="nav-label">Logout</span>';
+            }
         }
 
         function logout() {
             localStorage.removeItem('loggedInUser');
             localStorage.removeItem('loggedInUserType');
+            document.getElementById('accountOverlay').classList.remove('active');
+            updateAuthButtonsToLogin();
+            resetUserData();
             switchView('login');
         }
 
+        function resetUserData() {
+            // Dashboard
+            document.getElementById('dashboardWelcome').textContent = 'Welcome back';
+            document.getElementById('dashboardTitle').textContent = 'Dashboard';
+            
+            // E-ID Card
+            document.getElementById('eidName').textContent = '----';
+            document.getElementById('eidCourse').textContent = '----';
+            document.getElementById('eidRoll').textContent = '----';
+            document.getElementById('eidBatch').textContent = '----';
+            document.getElementById('eidAdmn').textContent = '----';
+            document.getElementById('eidSid').textContent = '----';
+
+            document.getElementById('eidLabel1').textContent = 'Roll No';
+            document.getElementById('eidLabel2').textContent = 'Batch';
+            document.getElementById('eidLabel3').textContent = 'Admission No';
+            document.getElementById('eidLabel4').textContent = 'Student ID';
+
+            // QR Code
+            document.getElementById('eidQr').src = '';
+            
+            // Photos
+            const defaultPhoto = "student.png";
+            document.getElementById('eidPhoto').src = defaultPhoto;
+            
+            const topBarAvatar = document.getElementById('topBarAvatar');
+            if (topBarAvatar) topBarAvatar.src = defaultPhoto;
+            
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            if (sidebarAvatar) sidebarAvatar.src = defaultPhoto;
+            
+            const dashboardPhoto = document.getElementById('dashboardPhoto');
+            if (dashboardPhoto) dashboardPhoto.src = defaultPhoto;
+            
+            const accPhoto = document.getElementById('accPhoto');
+            if (accPhoto) accPhoto.src = defaultPhoto;
+
+            // Account Overlay
+            document.getElementById('accName').textContent = 'Name';
+            document.getElementById('accRole').textContent = 'Role';
+            document.getElementById('accLabel1').textContent = 'ID';
+            document.getElementById('accValue1').textContent = '--';
+            document.getElementById('accLabel2').textContent = 'Dept';
+            document.getElementById('accValue2').textContent = '--';
+        }
+
+        function toggleAccountOverlay() {
+            const overlay = document.getElementById('accountOverlay');
+            overlay.classList.toggle('active');
+        }
+
         function switchView(viewId) {
+            // Protect views
+            if ((viewId === 'dashboard' || viewId === 'id-card') && !localStorage.getItem('loggedInUser')) {
+                viewId = 'login';
+            }
+
             // Update nav buttons
             var buttons = document.querySelectorAll('.nav-btn');
             buttons.forEach(function(btn) {

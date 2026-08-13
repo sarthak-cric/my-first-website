@@ -637,3 +637,38 @@ body {
     .dashboard-grid { grid-template-columns: 1fr; }
     .log-table th:nth-child(2), .log-table td:nth-child(2) { display: none; }
 }
+
+
+/* ---- Account Overlay ---- */
+.account-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px); z-index: 2000;
+    display: none; align-items: center; justify-content: center;
+}
+.account-overlay.active { display: flex; }
+.account-card {
+    background: var(--surface); width: 90%; max-width: 320px;
+    border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center;
+    position: relative; border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.account-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.05); border: none; color: var(--text-muted);
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.account-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+#accPhoto {
+    width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+    border: 3px solid var(--primary); margin-bottom: 1rem;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+#accName { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.2rem; }
+.acc-role { color: var(--primary); font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+.acc-info { display: flex; justify-content: space-around; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.acc-info-item { display: flex; flex-direction: column; gap: 0.2rem; }
+.acc-info-item span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.acc-info-item strong { font-size: 0.95rem; font-weight: 500; }
